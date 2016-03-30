@@ -23,7 +23,7 @@ img = pygame.image.load("example.png")
 
 def blocks(x_block, y_block, block_width, block_height, gap):
     pygame.draw.rect(surface, white, [x_block, y_block,block_width,block_height])
-    pygame.draw.rect(surface, white, [x_block, y_block+block_height+gap,block_width,block_height])
+    pygame.draw.rect(surface, white, [x_block, y_block+block_height+gap,block_width,surfaceHeight])
     
 
 def replay_or_quit():
@@ -80,10 +80,10 @@ def main():
     
     block_width=75
     
-    block_height=randint(0, surfaceHeight)
+    block_height=randint(0, (surfaceHeight/2))
     
     gap= imgHeight*randint(1,4)
-    block_move=3
+    block_move= randint(3,6)
     
     
     
@@ -109,8 +109,24 @@ def main():
         helicopter(x,y, img)
         blocks(x_block, y_block, block_width,block_height,gap)
         x_block-=block_move
+        
         if y> surfaceHeight-40 or y< 0:
             gameOver()
+        
+        if x_block <(-1*block_width):
+            x_block = surfaceWidth
+            block_height=randint(0, (surfaceHeight/2))
+            
+        if x+imgWidth > x_block:
+            if x<x_block+block_width:
+                if y < block_height:
+                    if x-imgWidth< block_width+x_block:
+                        gameOver()
+        
+        if x+imgWidth>x_block:
+            if y +imgHeight>block_height+gap:
+                if x< block_width +x_block:
+                    gameOver()
         
         pygame.display.update()
         clock.tick(60)
